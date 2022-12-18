@@ -115,25 +115,6 @@ export class OrderController {
     
   }
 
-  @patch('/orders')
-  @response(200, {
-    description: 'Order PATCH success count',
-    content: {'application/json': {schema: CountSchema}},
-  })
-  async updateAll(
-    @requestBody({
-      content: {
-        'application/json': {
-          schema: getModelSchemaRef(Order, {partial: true}),
-        },
-      },
-    })
-    order: Order,
-    @param.where(Order) where?: Where<Order>,
-  ): Promise<Count> {
-    return this.orderRepository.updateAll(order, where);
-  }
-
   @get('/orders/{id}')
   @response(200, {
     description: 'Order model instance',
