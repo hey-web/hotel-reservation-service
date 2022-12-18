@@ -4,9 +4,9 @@ import {juggler} from '@loopback/repository';
 const config = {
   name: 'mongo',
   connector: 'mongodb',
-  url: '',
-  host: '',
-  port: 0,
+  url: 'mongodb://localhost:27017',
+  host: 'localhost',
+  port: 27017,
   user: '',
   password: '',
   database: 'hotel-reservation',
