@@ -125,10 +125,14 @@ export class OrderController {
     },
   })
   async findById(
+    @inject(SecurityBindings.USER)
+    currentUserProfile: UserProfile,
     @param.path.number('id') id: string,
     @param.filter(Order, {exclude: 'where'}) filter?: FilterExcludingWhere<Order>
   ): Promise<Order> {
-    return this.orderRepository.findById(id, filter);
+    const user_id = currentUserProfile[securityId]
+    const orders = await this.userRepository.orders(user_id).find({where: { id: id }, limit: 1})
+    return orders[0]
   }
 
   @patch('/orders/{id}')
@@ -147,17 +151,6 @@ export class OrderController {
     order: Order,
   ): Promise<void> {
     await this.orderRepository.updateById(id, order);
-  }
-
-  @put('/orders/{id}')
-  @response(204, {
-    description: 'Order PUT success',
-  })
-  async replaceById(
-    @param.path.number('id') id: string,
-    @requestBody() order: Order,
-  ): Promise<void> {
-    await this.orderRepository.replaceById(id, order);
   }
 
   @del('/orders/{id}')
